@@ -1,4 +1,4 @@
-package com.starter.app;
+package com.crocodic.training.tiga;
 
 import android.app.Application;
 import android.content.Context;

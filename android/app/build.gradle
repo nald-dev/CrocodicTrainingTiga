@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.starter.app"
+        applicationId "com.crocodic.training.tiga"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

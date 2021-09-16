@@ -1,80 +1,66 @@
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, ScrollView, Text, TouchableOpacity } from 'react-native'
 
-import React, { useEffect } from 'react'
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 
-import messaging from '@react-native-firebase/messaging'
+import NavigatorParameters from 'models/navigators'
+import NoteType from 'models/note'
+import Note from '@components/note'
 
-import { StackScreenPropsType } from '@models/navigators'
+type PropsType = {
+  route: RouteProp<NavigatorParameters, 'Home'>,
+  navigation: StackNavigationProp<NavigatorParameters, 'Home'>
+}
 
-import { executeNotificationData } from '@references/functions/notification-actions'
-import { Sentence } from '@references/constants/sentence'
+function Home(props: PropsType) {
+  const [ notes, setNotes ] = useState<NoteType[]>([]) 
 
-function Home({ navigation, route }: StackScreenPropsType<'Home'>) {
   useEffect(() => {
-    messaging().getInitialNotification()
-    .then(remoteMessage => {
-      if (remoteMessage) {
-        executeNotificationData(remoteMessage.data)
-      }
-    })
+    loadData()
   }, [])
 
   return (
     <SafeAreaView
-      style={{
+      style = {{
         flex: 1
       }}
     >
-      <View
-        style={{
-          alignItems: 'center',
-          flex: 1,
-          justifyContent: 'center'
+      <ScrollView
+        contentContainerStyle = {{
+          padding: 20
         }}
-      >
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress = {() => navigation.navigate('PickImage')}
-          style={{
-            backgroundColor: 'dodgerblue',
-            borderRadius: 8,
-            elevation: 4,
-            marginHorizontal: 20,
-            marginTop: 20,
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-            shadowColor: 'dimgray',
-            shadowOffset: {
-              height: 2,
-              width: 0
-            },
-            shadowOpacity: 0.3,
-            shadowRadius: 4
-          }}
-        >
-          <Text
-            style={{
-              color: 'white',
-              fontSize: 20,
-              fontWeight: '500'
-            }}
-          >
-            Go To Pick Image Screen
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text
         style = {{
-          color: 'gray',
-          margin: 20,
-          textAlign: 'center'
+          flex: 1
         }}
       >
-        {Sentence.starterWatermark}
-      </Text>
+        {
+          notes.map(item => {
+            return (
+              <Note
+                key = {item.id}
+                value = {item.note}
+                onPress = {() => props.navigation.navigate('Detail', {
+                  note: item.note
+                })}
+              />
+            )
+          })
+        }
+      </ScrollView>
     </SafeAreaView>
   )
+
+  async function loadData() {
+    fetch('https://moon.crocodic.net/latihan-api/public/note/list?user_id=1')
+    .then(res => res.json())
+    .then(resJSON => {
+      if (resJSON.api_status == 1) {
+        setNotes(resJSON.data)
+      }
+    })
+    .catch(err => console.log(err))
+  }
 }
 
 export default Home

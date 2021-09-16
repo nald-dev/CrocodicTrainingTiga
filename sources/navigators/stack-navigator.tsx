@@ -1,11 +1,11 @@
 
 import React from 'react'
 
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
-import { NavigatorParameters } from '@models/navigators'
+import { createStackNavigator } from '@react-navigation/stack'
+import NavigatorParameters from 'models/navigators'
 
 import Home from '@screens/home'
-import PickImage from '@screens/pick-image'
+import Detail from '@screens/detail'
 
 const Stack = createStackNavigator<NavigatorParameters>()
 
@@ -13,31 +13,17 @@ function StackNavigator() {
   return (
     <Stack.Navigator
       screenOptions = {{
-        headerShown: true, // false to remove header
-        gestureEnabled: true // default true for ios, false for android
+        headerShown: true
       }}
     >
       <Stack.Screen
-        name = "Home"
+        name = 'Home'
         component = {Home}
-        options = {{
-          headerTitle: 'React Native Starter'
-        }}
       />
 
       <Stack.Screen
-        name = "PickImage"
-        component = {PickImage}
-        options = {{
-          ...TransitionPresets.SlideFromRightIOS,
-          headerBackTitleVisible: false,
-          headerStyle: {
-            backgroundColor: 'dodgerblue'
-          },
-          headerTintColor: 'white',
-          headerTitleAlign: 'center',
-          title: 'Pick Image'
-        }}
+        name = 'Detail'
+        component = {Detail}
       />
     </Stack.Navigator>
   )

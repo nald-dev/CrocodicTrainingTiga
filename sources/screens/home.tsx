@@ -14,7 +14,7 @@ type PropsType = {
 }
 
 function Home(props: PropsType) {
-  const [ notes, setNotes ] = useState<NoteType[]>([]) 
+  const [ notes, setNotes ] = useState([] as NoteType[]) 
 
   useEffect(() => {
     loadData()
